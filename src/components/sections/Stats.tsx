@@ -73,7 +73,7 @@ export default function Stats() {
       <div className="absolute inset-x-0 bottom-0 h-px" style={{ background: "linear-gradient(90deg, transparent, oklch(0.2 0.01 250), transparent)" }} />
 
       <div className="mx-auto grid max-w-5xl grid-cols-2 gap-8 px-8 sm:grid-cols-4 lg:px-12 xl:px-20">
-        {counters.map((c, i) => (
+        {counters.map((c) => (
           <div key={c.label} className="text-center">
             <div
               className="font-mono text-[clamp(1.5rem,4vw,2.5rem)] font-bold text-foreground/80"

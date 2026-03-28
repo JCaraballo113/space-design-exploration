@@ -389,7 +389,7 @@ function StatRow({ label, value, unit }: { label: string; value: string; unit: s
 
 /* ─── Scanline flash effect ─── */
 
-function useScanlineFlash(containerRef: React.RefObject<HTMLDivElement | null>) {
+function useScanlineFlash(_containerRef: React.RefObject<HTMLDivElement | null>) {
   const lineRef = useRef<HTMLDivElement>(null);
 
   const flash = useCallback(() => {

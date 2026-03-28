@@ -555,7 +555,7 @@ function MoonScene() {
     { scope: svgRef }
   );
 
-  const stars = Array.from({ length: 40 }, (_, i) => ({
+  const stars = Array.from({ length: 40 }, () => ({
     x: Math.random() * 900 + 50,
     y: Math.random() * 200 + 110,
     r: Math.random() * 1.2 + 0.3,
