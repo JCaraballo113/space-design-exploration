@@ -179,11 +179,7 @@ body.ambient-noise::before {
   100% { transform: translateY(100%); opacity: 0; }
 }
 
-/* Footer mission patch orbital rotation */
-@keyframes patch-orbit {
-  from { transform: rotate(-30deg); }
-  to { transform: rotate(330deg); }
-}
+
 
 /* Static noise shift for glitched comms */
 @keyframes static-shift {

@@ -280,7 +280,7 @@ function TransmissionRow({ tx, active, onComplete }: {
         </span>
         <ActivityIndicator active={typing} color={waveColor} />
         {tx.delay && (
-          <span className="text-foreground/12">
+          <span className="text-foreground/20">
             Δ {tx.delay}
           </span>
         )}

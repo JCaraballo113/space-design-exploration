@@ -390,28 +390,27 @@ function OrbitalDiagram() {
       <text className="orbit-label invisible" x="728" y="404" fill="var(--color-amber)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.2">090°</text>
       <text className="orbit-label invisible" x="400" y="736" fill="var(--color-amber)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.2">180°</text>
 
-      {/* Interactive body hitboxes — larger invisible circles for easier hover */}
+      {/* Interactive hitboxes — hover orbit paths (fat invisible strokes) and center body */}
       <circle cx="400" cy="400" r="25" fill="transparent" className="cursor-pointer" onMouseEnter={() => setHoveredBody("sol")} onMouseLeave={() => setHoveredBody(null)} />
-      <circle cx="400" cy="300" r="20" fill="transparent" className="cursor-pointer" onMouseEnter={() => setHoveredBody("terra")} onMouseLeave={() => setHoveredBody(null)} />
-      <circle cx="400" cy="240" r="20" fill="transparent" className="cursor-pointer" onMouseEnter={() => setHoveredBody("mars")} onMouseLeave={() => setHoveredBody(null)} />
-      <circle cx="400" cy="80" r="25" fill="transparent" className="cursor-pointer" onMouseEnter={() => setHoveredBody("jupiter")} onMouseLeave={() => setHoveredBody(null)} />
+      <ellipse cx="400" cy="400" rx="100" ry="100" fill="none" stroke="transparent" strokeWidth="20" className="cursor-pointer" onMouseEnter={() => setHoveredBody("terra")} onMouseLeave={() => setHoveredBody(null)} />
+      <ellipse cx="400" cy="400" rx="180" ry="160" fill="none" stroke="transparent" strokeWidth="20" className="cursor-pointer" transform="rotate(-15 400 400)" onMouseEnter={() => setHoveredBody("mars")} onMouseLeave={() => setHoveredBody(null)} />
+      <ellipse cx="400" cy="400" rx="370" ry="320" fill="none" stroke="transparent" strokeWidth="25" className="cursor-pointer" transform="rotate(-5 400 400)" onMouseEnter={() => setHoveredBody("jupiter")} onMouseLeave={() => setHoveredBody(null)} />
 
-      {/* Hover pulse rings */}
+      {/* Hover pulse — highlights the full orbit ring */}
       {hoveredBody === "sol" && <circle cx="400" cy="400" r="18" fill="none" stroke="var(--color-amber)" strokeWidth="1" opacity="0.5" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
-      {hoveredBody === "terra" && <circle className="orbit-body-moving" cx="500" cy="400" r="8" fill="none" stroke="var(--color-teal)" strokeWidth="0.8" opacity="0.5" data-orbit="0" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
-      {hoveredBody === "mars" && <circle className="orbit-body-moving" cx="580" cy="400" r="8" fill="none" stroke="var(--color-amber)" strokeWidth="0.8" opacity="0.5" data-orbit="1" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
-      {hoveredBody === "jupiter" && <circle className="orbit-body-moving" cx="680" cy="400" r="10" fill="none" stroke="var(--color-amber)" strokeWidth="0.8" opacity="0.5" data-orbit="2" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
+      {hoveredBody === "terra" && <ellipse cx="400" cy="400" rx="100" ry="100" fill="none" stroke="var(--color-amber)" strokeWidth="1" opacity="0.3" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
+      {hoveredBody === "mars" && <ellipse cx="400" cy="400" rx="180" ry="160" fill="none" stroke="var(--color-amber)" strokeWidth="1" opacity="0.3" transform="rotate(-15 400 400)" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
+      {hoveredBody === "jupiter" && <ellipse cx="400" cy="400" rx="370" ry="320" fill="none" stroke="var(--color-amber)" strokeWidth="1" opacity="0.2" transform="rotate(-5 400 400)" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
 
       {/* Tooltip for hovered body */}
       {hoveredBody && (() => {
         const body = bodyData.find(b => b.id === hoveredBody);
         if (!body) return null;
-        // Position tooltip near the body
         const positions: Record<string, { x: number; y: number }> = {
           sol: { x: 400, y: 350 },
-          terra: { x: 340, y: 290 },
-          mars: { x: 340, y: 220 },
-          jupiter: { x: 340, y: 100 },
+          terra: { x: 520, y: 320 },
+          mars: { x: 600, y: 270 },
+          jupiter: { x: 700, y: 150 },
         };
         const pos = positions[hoveredBody] ?? { x: 400, y: 400 };
         return (
@@ -697,10 +696,13 @@ export default function Hero({ ready = false }: { ready?: boolean }) {
 
       {/* Nav — fixed, follows scroll */}
       <nav
-        className="hero-nav invisible fixed top-0 right-0 left-0 z-40 flex items-center justify-between border-b border-border/50 px-8 py-4 backdrop-blur-md transition-transform duration-300 lg:px-12"
+        className="hero-nav fixed top-0 right-0 left-0 z-40 flex items-center justify-between border-b border-border/50 px-8 py-4 backdrop-blur-md transition-transform duration-300 lg:px-12"
+        aria-hidden={!navVisible}
         style={{
           backgroundColor: "oklch(0.06 0.005 250 / 0.7)",
           transform: navVisible ? "translateY(0)" : "translateY(-100%)",
+          visibility: "hidden",
+          opacity: 0,
         }}
       >
         <div className="font-mono text-xs font-bold tracking-[0.4em] text-amber uppercase">
