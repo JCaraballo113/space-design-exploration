@@ -162,6 +162,73 @@ function BackToTop() {
   );
 }
 
+function MissionPatch() {
+  const orbitRef = useRef<SVGEllipseElement>(null);
+  const tweenRef = useRef<gsap.core.Tween | null>(null);
+
+  useEffect(() => {
+    if (!orbitRef.current) return;
+    // Set initial rotation, then create paused infinite spin
+    gsap.set(orbitRef.current, { rotation: -30, svgOrigin: "80 80" });
+    tweenRef.current = gsap.to(orbitRef.current, {
+      rotation: "+=360",
+      duration: 8,
+      ease: "none",
+      repeat: -1,
+      paused: true,
+      svgOrigin: "80 80",
+    });
+    return () => { tweenRef.current?.kill(); };
+  }, []);
+
+  return (
+    <svg
+      viewBox="0 0 160 160"
+      fill="none"
+      className="group w-28 cursor-pointer"
+      onMouseEnter={() => tweenRef.current?.play()}
+      onMouseLeave={() => tweenRef.current?.pause()}
+    >
+      {/* Outer ring */}
+      <circle cx="80" cy="80" r="74" stroke="var(--color-amber)" strokeWidth="0.6" opacity="0.5" className="transition-opacity duration-500 group-hover:opacity-70" />
+      <circle cx="80" cy="80" r="70" stroke="var(--color-amber)" strokeWidth="0.4" strokeDasharray="2 4" opacity="0.35" className="transition-opacity duration-500 group-hover:opacity-50" />
+
+      {/* Inner ring */}
+      <circle cx="80" cy="80" r="45" stroke="var(--color-teal)" strokeWidth="0.5" opacity="0.4" className="transition-opacity duration-500 group-hover:opacity-60" />
+
+      {/* Star/compass at center */}
+      <line x1="80" y1="55" x2="80" y2="30" stroke="var(--color-amber)" strokeWidth="0.7" opacity="0.6" />
+      <line x1="80" y1="105" x2="80" y2="130" stroke="var(--color-amber)" strokeWidth="0.7" opacity="0.6" />
+      <line x1="55" y1="80" x2="30" y2="80" stroke="var(--color-amber)" strokeWidth="0.7" opacity="0.6" />
+      <line x1="105" y1="80" x2="130" y2="80" stroke="var(--color-amber)" strokeWidth="0.7" opacity="0.6" />
+
+      {/* Diagonal ticks */}
+      <line x1="62" y1="62" x2="50" y2="50" stroke="var(--color-amber)" strokeWidth="0.4" opacity="0.35" />
+      <line x1="98" y1="62" x2="110" y2="50" stroke="var(--color-amber)" strokeWidth="0.4" opacity="0.35" />
+      <line x1="62" y1="98" x2="50" y2="110" stroke="var(--color-amber)" strokeWidth="0.4" opacity="0.35" />
+      <line x1="98" y1="98" x2="110" y2="110" stroke="var(--color-amber)" strokeWidth="0.4" opacity="0.35" />
+
+      {/* Center dot — pulses on hover */}
+      <circle cx="80" cy="80" r="3" fill="var(--color-amber)" opacity="0.8" className="origin-center transition-transform duration-500 group-hover:scale-150" style={{ transformOrigin: "80px 80px" }} />
+      <circle cx="80" cy="80" r="8" stroke="var(--color-amber)" strokeWidth="0.5" opacity="0.35" className="origin-center transition-all duration-500 group-hover:opacity-60 group-hover:scale-125" style={{ transformOrigin: "80px 80px" }} />
+
+      {/* Orbital arc — rotates on hover, keeps position */}
+      <ellipse ref={orbitRef} cx="80" cy="80" rx="55" ry="25" stroke="var(--color-teal)" strokeWidth="0.5" className="opacity-30 transition-opacity duration-500 group-hover:opacity-50" />
+
+      {/* Small body on orbit */}
+      <circle cx="128" cy="68" r="1.5" fill="var(--color-teal)" opacity="0.7" className="transition-opacity duration-500 group-hover:opacity-100" />
+
+      {/* Text around ring */}
+      <text x="80" y="18" fill="var(--color-amber)" fontSize="5" fontFamily="var(--font-mono)" textAnchor="middle" letterSpacing="0.15em" opacity="0.55" className="transition-opacity duration-500 group-hover:opacity-80">
+        ASTRAX DEEP SPACE SYSTEMS
+      </text>
+      <text x="80" y="150" fill="var(--color-amber)" fontSize="4.5" fontFamily="var(--font-mono)" textAnchor="middle" letterSpacing="0.12em" opacity="0.4" className="transition-opacity duration-500 group-hover:opacity-60">
+        AD ASTRA PER ASPERA
+      </text>
+    </svg>
+  );
+}
+
 // Respect reduced motion preference globally for GSAP
 if (typeof window !== "undefined") {
   const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -235,44 +302,7 @@ export default function App() {
           {/* Mission patch + sign-off */}
           <div className="flex flex-col items-center gap-8">
             {/* SVG Mission Patch */}
-            <svg viewBox="0 0 160 160" fill="none" className="group w-28 cursor-pointer">
-              {/* Outer ring */}
-              <circle cx="80" cy="80" r="74" stroke="var(--color-amber)" strokeWidth="0.6" opacity="0.5" className="transition-opacity duration-500 group-hover:opacity-70" />
-              <circle cx="80" cy="80" r="70" stroke="var(--color-amber)" strokeWidth="0.4" strokeDasharray="2 4" opacity="0.35" className="transition-opacity duration-500 group-hover:opacity-50" />
-
-              {/* Inner ring */}
-              <circle cx="80" cy="80" r="45" stroke="var(--color-teal)" strokeWidth="0.5" opacity="0.4" className="transition-opacity duration-500 group-hover:opacity-60" />
-
-              {/* Star/compass at center */}
-              <line x1="80" y1="55" x2="80" y2="30" stroke="var(--color-amber)" strokeWidth="0.7" opacity="0.6" />
-              <line x1="80" y1="105" x2="80" y2="130" stroke="var(--color-amber)" strokeWidth="0.7" opacity="0.6" />
-              <line x1="55" y1="80" x2="30" y2="80" stroke="var(--color-amber)" strokeWidth="0.7" opacity="0.6" />
-              <line x1="105" y1="80" x2="130" y2="80" stroke="var(--color-amber)" strokeWidth="0.7" opacity="0.6" />
-
-              {/* Diagonal ticks */}
-              <line x1="62" y1="62" x2="50" y2="50" stroke="var(--color-amber)" strokeWidth="0.4" opacity="0.35" />
-              <line x1="98" y1="62" x2="110" y2="50" stroke="var(--color-amber)" strokeWidth="0.4" opacity="0.35" />
-              <line x1="62" y1="98" x2="50" y2="110" stroke="var(--color-amber)" strokeWidth="0.4" opacity="0.35" />
-              <line x1="98" y1="98" x2="110" y2="110" stroke="var(--color-amber)" strokeWidth="0.4" opacity="0.35" />
-
-              {/* Center dot — pulses on hover */}
-              <circle cx="80" cy="80" r="3" fill="var(--color-amber)" opacity="0.8" className="origin-center transition-transform duration-500 group-hover:scale-150" style={{ transformOrigin: "80px 80px" }} />
-              <circle cx="80" cy="80" r="8" stroke="var(--color-amber)" strokeWidth="0.5" opacity="0.35" className="origin-center transition-all duration-500 group-hover:opacity-60 group-hover:scale-125" style={{ transformOrigin: "80px 80px" }} />
-
-              {/* Orbital arc — rotates on hover */}
-              <ellipse cx="80" cy="80" rx="55" ry="25" stroke="var(--color-teal)" strokeWidth="0.5" className="opacity-30 transition-opacity duration-500 group-hover:opacity-50 group-hover:animate-[patch-orbit_8s_linear_infinite]" style={{ transformOrigin: "80px 80px", transform: "rotate(-30deg)" }} />
-
-              {/* Small body on orbit */}
-              <circle cx="128" cy="68" r="1.5" fill="var(--color-teal)" opacity="0.7" className="transition-opacity duration-500 group-hover:opacity-100" />
-
-              {/* Text around ring */}
-              <text x="80" y="18" fill="var(--color-amber)" fontSize="5" fontFamily="var(--font-mono)" textAnchor="middle" letterSpacing="0.15em" opacity="0.55" className="transition-opacity duration-500 group-hover:opacity-80">
-                ASTRAX DEEP SPACE SYSTEMS
-              </text>
-              <text x="80" y="150" fill="var(--color-amber)" fontSize="4.5" fontFamily="var(--font-mono)" textAnchor="middle" letterSpacing="0.12em" opacity="0.4" className="transition-opacity duration-500 group-hover:opacity-60">
-                AD ASTRA PER ASPERA
-              </text>
-            </svg>
+            <MissionPatch />
 
             {/* Transmission ends */}
             <div className="text-center">

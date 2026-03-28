@@ -215,19 +215,14 @@ function TransmissionRow({ tx, active, onComplete }: {
   const hasRevealed = useRef(false);
   const [typing, setTyping] = useState(false);
 
-  // Fade in the row when it becomes active and scroll it into view
+  // Fade in the row when it becomes active
   useEffect(() => {
     if (!active || !ref.current || hasRevealed.current) return;
     hasRevealed.current = true;
     setTyping(true);
     gsap.fromTo(ref.current,
       { autoAlpha: 0, y: 12 },
-      {
-        autoAlpha: 1, y: 0, duration: 0.35, ease: "power2.out",
-        onComplete: () => {
-          ref.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        },
-      }
+      { autoAlpha: 1, y: 0, duration: 0.35, ease: "power2.out" }
     );
   }, [active]);
 

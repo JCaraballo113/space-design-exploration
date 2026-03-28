@@ -760,8 +760,6 @@ export default function Hero({ ready = false }: { ready?: boolean }) {
         </div>
       </div>
 
-      {/* Bottom border line */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 h-px bg-border/50" />
     </section>
   );
 }
