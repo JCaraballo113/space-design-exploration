@@ -99,64 +99,64 @@ interface SvgPart {
 const engineParts: Record<EngineType, SvgPart> = {
   ion: {
     paths: [
-      { d: "M 590,88 L 630,75 L 630,145 L 590,132", stroke: "var(--color-teal)", strokeWidth: "0.5", opacity: "0.35" },
-      { d: "M 630,75 L 660,68 M 630,145 L 660,152", stroke: "var(--color-teal)", strokeWidth: "0.4", opacity: "0.2" },
+      { d: "M 590,88 L 630,75 L 630,145 L 590,132", stroke: "var(--color-teal)", strokeWidth: "0.5", opacity: "0.63" },
+      { d: "M 630,75 L 660,68 M 630,145 L 660,152", stroke: "var(--color-teal)", strokeWidth: "0.4", opacity: "0.36" },
     ],
     lines: [
-      { x1: "640", y1: "85", x2: "670", y2: "85", stroke: "var(--color-teal)", strokeWidth: "0.3", opacity: "0.2" },
-      { x1: "640", y1: "100", x2: "680", y2: "100", stroke: "var(--color-teal)", strokeWidth: "0.35", opacity: "0.25" },
-      { x1: "640", y1: "110", x2: "690", y2: "110", stroke: "var(--color-teal)", strokeWidth: "0.4", opacity: "0.3" },
-      { x1: "640", y1: "120", x2: "680", y2: "120", stroke: "var(--color-teal)", strokeWidth: "0.35", opacity: "0.25" },
-      { x1: "640", y1: "135", x2: "670", y2: "135", stroke: "var(--color-teal)", strokeWidth: "0.3", opacity: "0.2" },
+      { x1: "640", y1: "85", x2: "670", y2: "85", stroke: "var(--color-teal)", strokeWidth: "0.3", opacity: "0.36" },
+      { x1: "640", y1: "100", x2: "680", y2: "100", stroke: "var(--color-teal)", strokeWidth: "0.35", opacity: "0.45" },
+      { x1: "640", y1: "110", x2: "690", y2: "110", stroke: "var(--color-teal)", strokeWidth: "0.4", opacity: "0.54" },
+      { x1: "640", y1: "120", x2: "680", y2: "120", stroke: "var(--color-teal)", strokeWidth: "0.35", opacity: "0.45" },
+      { x1: "640", y1: "135", x2: "670", y2: "135", stroke: "var(--color-teal)", strokeWidth: "0.3", opacity: "0.36" },
     ],
     rects: [
-      { x: "555", y: "90", width: "40", height: "40", stroke: "var(--color-teal)", strokeWidth: "0.5", opacity: "0.25" },
+      { x: "555", y: "90", width: "40", height: "40", stroke: "var(--color-teal)", strokeWidth: "0.5", opacity: "0.45" },
     ],
     circles: [
-      { cx: "575", cy: "110", r: "8", stroke: "var(--color-teal)", strokeWidth: "0.4", opacity: "0.3" },
-      { cx: "575", cy: "110", r: "2", fill: "var(--color-teal)", opacity: "0.6" },
+      { cx: "575", cy: "110", r: "8", stroke: "var(--color-teal)", strokeWidth: "0.4", opacity: "0.54" },
+      { cx: "575", cy: "110", r: "2", fill: "var(--color-teal)", opacity: "0.70" },
     ],
     label: "ION.DRIVE",
     labelPos: { x: "610", y: "165" },
   },
   chemical: {
     paths: [
-      { d: "M 590,82 L 650,65 L 650,155 L 590,138", stroke: "var(--color-teal)", strokeWidth: "0.6", opacity: "0.35" },
-      { d: "M 650,65 Q 670,110 650,155", stroke: "var(--color-teal)", strokeWidth: "0.5", opacity: "0.25" },
+      { d: "M 590,82 L 650,65 L 650,155 L 590,138", stroke: "var(--color-teal)", strokeWidth: "0.6", opacity: "0.63" },
+      { d: "M 650,65 Q 670,110 650,155", stroke: "var(--color-teal)", strokeWidth: "0.5", opacity: "0.45" },
     ],
     lines: [
-      { x1: "560", y1: "95", x2: "560", y2: "125", stroke: "var(--color-teal)", strokeWidth: "0.4", opacity: "0.2" },
-      { x1: "570", y1: "90", x2: "570", y2: "130", stroke: "var(--color-teal)", strokeWidth: "0.4", opacity: "0.25" },
-      { x1: "580", y1: "87", x2: "580", y2: "133", stroke: "var(--color-teal)", strokeWidth: "0.4", opacity: "0.25" },
+      { x1: "560", y1: "95", x2: "560", y2: "125", stroke: "var(--color-teal)", strokeWidth: "0.4", opacity: "0.36" },
+      { x1: "570", y1: "90", x2: "570", y2: "130", stroke: "var(--color-teal)", strokeWidth: "0.4", opacity: "0.45" },
+      { x1: "580", y1: "87", x2: "580", y2: "133", stroke: "var(--color-teal)", strokeWidth: "0.4", opacity: "0.45" },
     ],
     rects: [
-      { x: "540", y: "85", width: "55", height: "50", rx: "2", stroke: "var(--color-teal)", strokeWidth: "0.5", opacity: "0.3" },
+      { x: "540", y: "85", width: "55", height: "50", rx: "2", stroke: "var(--color-teal)", strokeWidth: "0.5", opacity: "0.54" },
     ],
     circles: [
-      { cx: "650", cy: "110", r: "6", stroke: "var(--color-teal)", strokeWidth: "0.5", opacity: "0.4" },
-      { cx: "650", cy: "110", r: "2.5", fill: "var(--color-teal)", opacity: "0.7" },
+      { cx: "650", cy: "110", r: "6", stroke: "var(--color-teal)", strokeWidth: "0.5", opacity: "0.70" },
+      { cx: "650", cy: "110", r: "2.5", fill: "var(--color-teal)", opacity: "0.70" },
     ],
     label: "CHEM.THRUST",
     labelPos: { x: "610", y: "165" },
   },
   nuclear: {
     paths: [
-      { d: "M 590,80 L 660,60 L 660,160 L 590,140", stroke: "var(--color-teal)", strokeWidth: "0.6", opacity: "0.35" },
-      { d: "M 660,60 L 680,55 M 660,160 L 680,165", stroke: "var(--color-teal)", strokeWidth: "0.4", opacity: "0.2" },
+      { d: "M 590,80 L 660,60 L 660,160 L 590,140", stroke: "var(--color-teal)", strokeWidth: "0.6", opacity: "0.63" },
+      { d: "M 660,60 L 680,55 M 660,160 L 680,165", stroke: "var(--color-teal)", strokeWidth: "0.4", opacity: "0.36" },
     ],
     lines: [
-      { x1: "660", y1: "90", x2: "695", y2: "90", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.2" },
-      { x1: "660", y1: "110", x2: "710", y2: "110", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.35" },
-      { x1: "660", y1: "130", x2: "695", y2: "130", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.2" },
+      { x1: "660", y1: "90", x2: "695", y2: "90", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.36" },
+      { x1: "660", y1: "110", x2: "710", y2: "110", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.63" },
+      { x1: "660", y1: "130", x2: "695", y2: "130", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.36" },
     ],
     rects: [
-      { x: "545", y: "82", width: "50", height: "56", rx: "2", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.25" },
-      { x: "555", y: "92", width: "30", height: "36", rx: "1", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.2" },
+      { x: "545", y: "82", width: "50", height: "56", rx: "2", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.45" },
+      { x: "555", y: "92", width: "30", height: "36", rx: "1", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.36" },
     ],
     circles: [
-      { cx: "570", cy: "110", r: "10", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.3" },
-      { cx: "570", cy: "110", r: "4", fill: "var(--color-amber)", opacity: "0.5" },
-      { cx: "570", cy: "110", r: "1.5", fill: "var(--color-amber)", opacity: "0.8" },
+      { cx: "570", cy: "110", r: "10", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.54" },
+      { cx: "570", cy: "110", r: "4", fill: "var(--color-amber)", opacity: "0.70" },
+      { cx: "570", cy: "110", r: "1.5", fill: "var(--color-amber)", opacity: "0.70" },
     ],
     label: "NUC.PULSE",
     labelPos: { x: "610", y: "165" },
@@ -166,15 +166,15 @@ const engineParts: Record<EngineType, SvgPart> = {
 const hullParts: Record<HullType, SvgPart> = {
   lightweight: {
     paths: [
-      { d: "M 200,92 L 530,88 L 530,132 L 200,128", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.25" },
+      { d: "M 200,92 L 530,88 L 530,132 L 200,128", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.45" },
     ],
     lines: [
-      { x1: "280", y1: "88", x2: "280", y2: "20", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.2" },
-      { x1: "280", y1: "132", x2: "280", y2: "200", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.2" },
+      { x1: "280", y1: "88", x2: "280", y2: "20", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.36" },
+      { x1: "280", y1: "132", x2: "280", y2: "200", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.36" },
     ],
     rects: [
-      { x: "250", y: "8", width: "60", height: "14", rx: "1", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.2" },
-      { x: "250", y: "198", width: "60", height: "14", rx: "1", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.2" },
+      { x: "250", y: "8", width: "60", height: "14", rx: "1", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.36" },
+      { x: "250", y: "198", width: "60", height: "14", rx: "1", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.36" },
     ],
     circles: [],
     label: "HULL.LITE",
@@ -182,18 +182,18 @@ const hullParts: Record<HullType, SvgPart> = {
   },
   reinforced: {
     paths: [
-      { d: "M 200,86 L 530,82 L 530,138 L 200,134", stroke: "var(--color-amber)", strokeWidth: "0.6", opacity: "0.3" },
-      { d: "M 205,90 L 525,86 L 525,134 L 205,130", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.15" },
+      { d: "M 200,86 L 530,82 L 530,138 L 200,134", stroke: "var(--color-amber)", strokeWidth: "0.6", opacity: "0.54" },
+      { d: "M 205,90 L 525,86 L 525,134 L 205,130", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.27" },
     ],
     lines: [
-      { x1: "280", y1: "82", x2: "280", y2: "15", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.25" },
-      { x1: "280", y1: "138", x2: "280", y2: "205", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.25" },
-      { x1: "350", y1: "82", x2: "350", y2: "138", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.1" },
-      { x1: "420", y1: "82", x2: "420", y2: "138", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.1" },
+      { x1: "280", y1: "82", x2: "280", y2: "15", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.45" },
+      { x1: "280", y1: "138", x2: "280", y2: "205", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.45" },
+      { x1: "350", y1: "82", x2: "350", y2: "138", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.18" },
+      { x1: "420", y1: "82", x2: "420", y2: "138", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.18" },
     ],
     rects: [
-      { x: "245", y: "2", width: "70", height: "16", rx: "1", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.25" },
-      { x: "245", y: "202", width: "70", height: "16", rx: "1", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.25" },
+      { x: "245", y: "2", width: "70", height: "16", rx: "1", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.45" },
+      { x: "245", y: "202", width: "70", height: "16", rx: "1", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.45" },
     ],
     circles: [],
     label: "HULL.ARMR",
@@ -201,17 +201,17 @@ const hullParts: Record<HullType, SvgPart> = {
   },
   stealth: {
     paths: [
-      { d: "M 200,95 L 530,90 L 540,110 L 530,130 L 200,125", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.2" },
+      { d: "M 200,95 L 530,90 L 540,110 L 530,130 L 200,125", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.36" },
     ],
     lines: [
-      { x1: "260", y1: "93", x2: "260", y2: "40", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.15" },
-      { x1: "300", y1: "91", x2: "300", y2: "40", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.15" },
-      { x1: "260", y1: "127", x2: "260", y2: "180", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.15" },
-      { x1: "300", y1: "129", x2: "300", y2: "180", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.15" },
+      { x1: "260", y1: "93", x2: "260", y2: "40", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.27" },
+      { x1: "300", y1: "91", x2: "300", y2: "40", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.27" },
+      { x1: "260", y1: "127", x2: "260", y2: "180", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.27" },
+      { x1: "300", y1: "129", x2: "300", y2: "180", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.27" },
     ],
     rects: [
-      { x: "248", y: "30", width: "64", height: "12", rx: "1", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.15" },
-      { x: "248", y: "178", width: "64", height: "12", rx: "1", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.15" },
+      { x: "248", y: "30", width: "64", height: "12", rx: "1", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.27" },
+      { x: "248", y: "178", width: "64", height: "12", rx: "1", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.27" },
     ],
     circles: [],
     label: "HULL.STLTH",
@@ -222,35 +222,35 @@ const hullParts: Record<HullType, SvgPart> = {
 const payloadParts: Record<PayloadType, SvgPart> = {
   science: {
     paths: [
-      { d: "M 140,95 L 125,80 L 125,140 L 140,125", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.3" },
+      { d: "M 140,95 L 125,80 L 125,140 L 140,125", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.54" },
     ],
     lines: [
-      { x1: "160", y1: "95", x2: "160", y2: "50", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.25" },
+      { x1: "160", y1: "95", x2: "160", y2: "50", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.45" },
     ],
     rects: [
-      { x: "138", y: "90", width: "60", height: "40", rx: "2", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.25" },
-      { x: "148", y: "97", width: "18", height: "26", rx: "1", stroke: "var(--color-teal)", strokeWidth: "0.3", opacity: "0.2" },
-      { x: "172", y: "97", width: "18", height: "26", rx: "1", stroke: "var(--color-teal)", strokeWidth: "0.3", opacity: "0.2" },
+      { x: "138", y: "90", width: "60", height: "40", rx: "2", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.45" },
+      { x: "148", y: "97", width: "18", height: "26", rx: "1", stroke: "var(--color-teal)", strokeWidth: "0.3", opacity: "0.36" },
+      { x: "172", y: "97", width: "18", height: "26", rx: "1", stroke: "var(--color-teal)", strokeWidth: "0.3", opacity: "0.36" },
     ],
     circles: [
-      { cx: "160", cy: "50", r: "6", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.3" },
-      { cx: "160", cy: "50", r: "2", fill: "var(--color-amber)", opacity: "0.5" },
+      { cx: "160", cy: "50", r: "6", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.54" },
+      { cx: "160", cy: "50", r: "2", fill: "var(--color-amber)", opacity: "0.70" },
     ],
     label: "SCI.LAB",
     labelPos: { x: "160", y: "150" },
   },
   cargo: {
     paths: [
-      { d: "M 135,88 L 120,78 L 120,142 L 135,132", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.3" },
+      { d: "M 135,88 L 120,78 L 120,142 L 135,132", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.54" },
     ],
     lines: [
-      { x1: "150", y1: "88", x2: "150", y2: "132", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.1" },
-      { x1: "170", y1: "88", x2: "170", y2: "132", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.1" },
-      { x1: "190", y1: "88", x2: "190", y2: "132", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.1" },
+      { x1: "150", y1: "88", x2: "150", y2: "132", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.18" },
+      { x1: "170", y1: "88", x2: "170", y2: "132", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.18" },
+      { x1: "190", y1: "88", x2: "190", y2: "132", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.18" },
     ],
     rects: [
-      { x: "133", y: "86", width: "70", height: "48", rx: "2", stroke: "var(--color-amber)", strokeWidth: "0.6", opacity: "0.3" },
-      { x: "138", y: "91", width: "60", height: "38", rx: "1", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.15" },
+      { x: "133", y: "86", width: "70", height: "48", rx: "2", stroke: "var(--color-amber)", strokeWidth: "0.6", opacity: "0.54" },
+      { x: "138", y: "91", width: "60", height: "38", rx: "1", stroke: "var(--color-amber)", strokeWidth: "0.3", opacity: "0.27" },
     ],
     circles: [],
     label: "CARGO.BAY",
@@ -258,23 +258,23 @@ const payloadParts: Record<PayloadType, SvgPart> = {
   },
   weapons: {
     paths: [
-      { d: "M 140,92 L 118,75 L 118,145 L 140,128", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.3" },
+      { d: "M 140,92 L 118,75 L 118,145 L 140,128", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.54" },
     ],
     lines: [
-      { x1: "155", y1: "92", x2: "135", y2: "60", stroke: "var(--color-amber)", strokeWidth: "0.35", opacity: "0.25" },
-      { x1: "175", y1: "92", x2: "185", y2: "55", stroke: "var(--color-amber)", strokeWidth: "0.35", opacity: "0.25" },
-      { x1: "155", y1: "128", x2: "135", y2: "160", stroke: "var(--color-amber)", strokeWidth: "0.35", opacity: "0.25" },
-      { x1: "175", y1: "128", x2: "185", y2: "165", stroke: "var(--color-amber)", strokeWidth: "0.35", opacity: "0.25" },
+      { x1: "155", y1: "92", x2: "135", y2: "60", stroke: "var(--color-amber)", strokeWidth: "0.35", opacity: "0.45" },
+      { x1: "175", y1: "92", x2: "185", y2: "55", stroke: "var(--color-amber)", strokeWidth: "0.35", opacity: "0.45" },
+      { x1: "155", y1: "128", x2: "135", y2: "160", stroke: "var(--color-amber)", strokeWidth: "0.35", opacity: "0.45" },
+      { x1: "175", y1: "128", x2: "185", y2: "165", stroke: "var(--color-amber)", strokeWidth: "0.35", opacity: "0.45" },
     ],
     rects: [
-      { x: "138", y: "88", width: "55", height: "44", rx: "2", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.25" },
+      { x: "138", y: "88", width: "55", height: "44", rx: "2", stroke: "var(--color-amber)", strokeWidth: "0.5", opacity: "0.45" },
     ],
     circles: [
-      { cx: "135", cy: "60", r: "3", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.3" },
-      { cx: "185", cy: "55", r: "3", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.3" },
-      { cx: "135", cy: "160", r: "3", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.3" },
-      { cx: "185", cy: "165", r: "3", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.3" },
-      { cx: "165", cy: "110", r: "4", fill: "var(--color-amber)", opacity: "0.4" },
+      { cx: "135", cy: "60", r: "3", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.54" },
+      { cx: "185", cy: "55", r: "3", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.54" },
+      { cx: "135", cy: "160", r: "3", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.54" },
+      { cx: "185", cy: "165", r: "3", stroke: "var(--color-amber)", strokeWidth: "0.4", opacity: "0.54" },
+      { cx: "165", cy: "110", r: "4", fill: "var(--color-amber)", opacity: "0.70" },
     ],
     label: "WPNS.ARY",
     labelPos: { x: "160", y: "150" },
@@ -1142,24 +1142,24 @@ export default function Configurator() {
               >
                 <defs>
                   <radialGradient id="cfg-glow-engine" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="var(--color-teal)" stopOpacity="0.12" />
+                    <stop offset="0%" stopColor="var(--color-teal)" stopOpacity="0.2" />
                     <stop offset="100%" stopColor="var(--color-teal)" stopOpacity="0" />
                   </radialGradient>
                   <radialGradient id="cfg-glow-payload" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="var(--color-amber)" stopOpacity="0.1" />
+                    <stop offset="0%" stopColor="var(--color-amber)" stopOpacity="0.18" />
                     <stop offset="100%" stopColor="var(--color-amber)" stopOpacity="0" />
                   </radialGradient>
                 </defs>
 
                 {/* Center spine */}
-                <line className="cfg-spine" x1="100" y1="110" x2="700" y2="110" stroke="var(--color-amber)" strokeWidth="0.5" opacity="0.15" />
+                <line className="cfg-spine" x1="100" y1="110" x2="700" y2="110" stroke="var(--color-amber)" strokeWidth="0.6" opacity="0.3" />
 
                 {/* Ambient glows */}
                 <ellipse cx="620" cy="110" rx="40" ry="50" fill="url(#cfg-glow-engine)" />
                 <ellipse cx="160" cy="110" rx="35" ry="40" fill="url(#cfg-glow-payload)" />
 
                 {/* Command module (static) */}
-                <path className="cfg-stroke" d="M 100,110 L 120,95 L 120,125 Z" stroke="var(--color-amber)" strokeWidth="0.5" opacity="0.3" fill="none" />
+                <path className="cfg-stroke" d="M 100,110 L 120,95 L 120,125 Z" stroke="var(--color-amber)" strokeWidth="0.6" opacity="0.5" fill="none" />
 
                 {/* Ghost preview zones (shown on button hover) */}
                 {previewEngine && (
