@@ -217,12 +217,12 @@ function ShootingStars() {
     const spawnStar = () => {
       if (!container) return;
 
-      // Random start position (top half of screen, any horizontal position)
-      const startX = Math.random() * 100;
-      const startY = Math.random() * 40;
-      // Travel direction: mostly downward-left to downward-right
-      const angle = 20 + Math.random() * 40; // 20-60 degrees from horizontal
-      const length = 80 + Math.random() * 120;
+      // Start position — constrained to visible area (20-80% horizontal, 10-50% vertical)
+      const startX = 20 + Math.random() * 60;
+      const startY = 10 + Math.random() * 40;
+      // Travel direction: mostly downward at a shallow angle
+      const angle = 15 + Math.random() * 30; // 15-45 degrees from horizontal
+      const length = 60 + Math.random() * 80;
       const dx = Math.cos(angle * Math.PI / 180) * length;
       const dy = Math.sin(angle * Math.PI / 180) * length;
 
@@ -263,11 +263,11 @@ function ShootingStars() {
       });
 
       // Schedule next
-      timer = setTimeout(spawnStar, 12000 + Math.random() * 10000);
+      timer = setTimeout(spawnStar, 12000);
     };
 
-    // First star after a random delay
-    timer = setTimeout(spawnStar, 5000 + Math.random() * 8000);
+    // First star after 3 seconds
+    timer = setTimeout(spawnStar, 3000);
 
     return () => clearTimeout(timer);
   }, []);
