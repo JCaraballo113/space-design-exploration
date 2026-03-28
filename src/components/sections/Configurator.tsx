@@ -1061,7 +1061,7 @@ export default function Configurator() {
         duration: 0.4,
         stagger: 0.08,
         ease: "power2.out",
-        scrollTrigger: { trigger: ".stat-row", start: "top 90%" },
+        scrollTrigger: { trigger: ".stat-row", start: "top 85%" },
         delay: 0.8,
       });
     },

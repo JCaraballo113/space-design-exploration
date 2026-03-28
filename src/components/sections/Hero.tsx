@@ -61,7 +61,7 @@ function CursorTrail({ containerRef }: { containerRef: React.RefObject<HTMLEleme
   }, [containerRef]);
 
   return (
-    <div className="pointer-events-none absolute inset-0 z-[5] hidden overflow-hidden lg:block">
+    <div className="pointer-events-none absolute inset-0 z-[5] hidden overflow-hidden lg:block" aria-hidden="true">
       {Array.from({ length: TRAIL_COUNT }, (_, i) => (
         <div
           key={i}
@@ -527,7 +527,7 @@ function ClickRippleLayer({ containerRef }: { containerRef: React.RefObject<HTML
   }, [containerRef]);
 
   return (
-    <div ref={ripplesRef} className="pointer-events-none absolute inset-0 z-[6] hidden overflow-hidden lg:block" />
+    <div ref={ripplesRef} className="pointer-events-none absolute inset-0 z-[6] hidden overflow-hidden lg:block" aria-hidden="true" />
   );
 }
 
@@ -643,7 +643,7 @@ export default function Hero({ ready = false }: { ready?: boolean }) {
               <button
                 key={link.section}
                 onClick={() => scrollToSection(link.section)}
-                className={`relative pb-1 transition-colors hover:text-amber ${isActive ? "text-amber" : ""}`}
+                className={`relative pb-1 transition-colors hover:text-amber focus-visible:text-amber focus-visible:outline-1 focus-visible:outline-amber ${isActive ? "text-amber" : ""}`}
               >
                 {link.label}
                 {isActive && (

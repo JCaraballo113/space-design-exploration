@@ -403,10 +403,11 @@ export default function CommsLog() {
 
   // When classified appears, advance activeIndex so it starts typing
   useEffect(() => {
-    if (showClassified && activeIndex < transmissions.length) {
+    if (showClassified && activeIndex === transmissions.length - 1) {
       setActiveIndex(transmissions.length);
     }
-  }, [showClassified, activeIndex]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showClassified]);
 
   // When a message completes, advance to the next after a short pause
   const handleMessageComplete = useRef((index: number) => {

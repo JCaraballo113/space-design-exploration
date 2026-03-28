@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const NavIcon = forwardRef<SVGSVGElement>(function NavIcon(_, ref) {
   return (
-    <svg ref={ref} viewBox="0 0 60 60" fill="none" className="size-14 opacity-70">
+    <svg ref={ref} viewBox="0 0 60 60" fill="none" className="size-14 opacity-70" role="img" aria-label="Navigation system">
       <circle className="nav-ring-outer" cx="30" cy="30" r="22" stroke="var(--color-amber)" strokeWidth="0.5" strokeDasharray="3 4" opacity="0.4" />
       <circle className="nav-ring-inner" cx="30" cy="30" r="12" stroke="var(--color-amber)" strokeWidth="0.5" opacity="0.3" />
       <circle className="nav-center" cx="30" cy="30" r="2" fill="var(--color-amber)" opacity="0.8" />
@@ -31,7 +31,7 @@ const NavIcon = forwardRef<SVGSVGElement>(function NavIcon(_, ref) {
 
 const PropIcon = forwardRef<SVGSVGElement>(function PropIcon(_, ref) {
   return (
-    <svg ref={ref} viewBox="0 0 60 60" fill="none" className="size-14 opacity-70">
+    <svg ref={ref} viewBox="0 0 60 60" fill="none" className="size-14 opacity-70" role="img" aria-label="Propulsion system">
       {/* Thruster nozzle */}
       <path d="M 22,15 L 38,15 L 42,45 L 18,45 Z" stroke="var(--color-teal)" strokeWidth="0.6" opacity="0.4" />
       <path d="M 18,45 Q 30,58 42,45" stroke="var(--color-teal)" strokeWidth="0.5" opacity="0.3" />
@@ -52,7 +52,7 @@ const PropIcon = forwardRef<SVGSVGElement>(function PropIcon(_, ref) {
 
 const CommsIcon = forwardRef<SVGSVGElement>(function CommsIcon(_, ref) {
   return (
-    <svg ref={ref} viewBox="0 0 60 60" fill="none" className="size-14 opacity-70">
+    <svg ref={ref} viewBox="0 0 60 60" fill="none" className="size-14 opacity-70" role="img" aria-label="Communications system">
       {/* Dish */}
       <path d="M 15,35 Q 30,10 45,35" stroke="var(--color-amber)" strokeWidth="0.6" opacity="0.4" />
       <line x1="30" y1="22" x2="30" y2="50" stroke="var(--color-amber)" strokeWidth="0.5" opacity="0.3" />
@@ -190,7 +190,7 @@ function PowerBar({ percent, color, delay }: { percent: number; color: string; d
         scaleX: 1,
         duration: 1.5,
         ease: "power2.out",
-        scrollTrigger: { trigger: barRef.current, start: "top 90%", once: true },
+        scrollTrigger: { trigger: barRef.current, start: "top 85%", once: true },
         delay,
       }
     );
