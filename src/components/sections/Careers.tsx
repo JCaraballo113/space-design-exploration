@@ -225,143 +225,89 @@ function MoonScene() {
        * then settles into a gentle idle hover.
        */
 
-      const st = { scrollTrigger: { trigger, start: "top 75%" } };
+      const st = { scrollTrigger: { trigger, start: "top 75%", once: true } };
 
-      // Helper: float down and hover, randomized per visit
+      // Helper: build a single timeline per astronaut — no competing tweens
       const ids = ["a1", "a2", "a3"];
       const floatDown = (num: number, delay: number) => {
         const pos = `.astro-pos-${num}`;
         const bounce = `.astro-bounce-${num}`;
         const aid = ids[num - 1];
 
-        // Random per visit
-        const fallDur = gsap.utils.random(8, 12);
+        const fallDur = 6;
         const hoverAmp = gsap.utils.random(3, 8);
         const hoverSpeed = gsap.utils.random(2.0, 3.0);
-
-        // Quick fade-in so they're visible almost immediately on scroll
-        gsap.from(pos, {
-          autoAlpha: 0,
-          duration: 0.6,
-          ease: "power2.out",
-          ...st,
-          delay,
-        });
-
-        // Slow float down — separate from fade so descent stays gentle
-        gsap.from(pos, {
-          y: -120,
-          duration: fallDur,
-          ease: "none",
-          ...st,
-          delay,
-        });
-
-        // Leaf-like sway during descent — gentle but visible lateral drift.
         const swayAmp = gsap.utils.random(12, 20);
-        const swaySpeed = gsap.utils.random(2.0, 3.0);
         const wobble = gsap.utils.random(4, 9);
-        gsap.to(bounce, {
-          x: gsap.utils.random([-1, 1]) * swayAmp,
-          rotation: gsap.utils.random([-1, 1]) * wobble,
-          duration: swaySpeed,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          ...st,
-          delay,
-        });
-
-        // Zero-g limb drift — animate endpoints AND their attached hand/boot together.
-        // Joints stay fixed at shoulder/hip; only the free end floats.
         const limbDrift = gsap.utils.random(1.8, 2.5);
 
-        // Left arm: line endpoint + hand circle move together
-        const laX = gsap.utils.random(-16, -8), laY = gsap.utils.random(6, 16);
-        gsap.to(`.arm-left-${aid} line`, {
-          attr: { x2: laX, y2: laY },
-          duration: limbDrift, repeat: -1, yoyo: true, ease: "sine.inOut", ...st, delay,
-        });
-        gsap.to(`.arm-left-${aid} circle`, {
-          attr: { cx: laX, cy: laY },
-          duration: limbDrift, repeat: -1, yoyo: true, ease: "sine.inOut", ...st, delay,
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger, start: "top 75%", once: true },
+          delay,
         });
 
-        // Right arm: gsap.to with yoyo — starts from SVG defaults (no snap),
-        // drifts to the floating-outward pose, yoyos back. Chain stays connected
-        // because both extremes share matching elbow coords.
-        // SVG defaults: upper-arm x2:8,y2:10 / forearm x1:8,y1:10,x2:12,y2:12 / hand cx:12,cy:12
-        // Float target: upper-arm x2:10,y2:4  / forearm x1:10,y1:4, x2:14,y2:6  / hand cx:14,cy:6
-        const driftDur = limbDrift * 1.1;
-        const driftCfg = { duration: driftDur, repeat: -1, yoyo: true, ease: "sine.inOut", ...st, delay };
-        gsap.to(`.upper-arm-${aid}`, { attr: { x2: 10, y2: 4 }, ...driftCfg });
-        gsap.to(`.forearm-${aid}`, { attr: { x1: 10, y1: 4, x2: 14, y2: 6 }, ...driftCfg });
-        gsap.to(`.hand-${aid}`, { attr: { cx: 14, cy: 6 }, ...driftCfg });
+        // Phase 1: Fade in + float down + sway
+        tl.from(pos, { autoAlpha: 0, duration: 0.6, ease: "power2.out" }, 0);
+        tl.from(pos, { y: -120, duration: fallDur, ease: "sine.out" }, 0);
 
-        // Left leg: line endpoint + boot move together
-        const llX = gsap.utils.random(-8, -2), llY = gsap.utils.random(14, 20);
-        gsap.to(`.leg-left-${aid} line`, {
-          attr: { x2: llX, y2: llY },
-          duration: limbDrift * 0.9, repeat: -1, yoyo: true, ease: "sine.inOut", ...st, delay: delay + 0.3,
-        });
-        gsap.to(`.leg-left-${aid} rect`, {
-          attr: { x: llX - 3, y: llY - 2 },
-          duration: limbDrift * 0.9, repeat: -1, yoyo: true, ease: "sine.inOut", ...st, delay: delay + 0.3,
-        });
+        // Sway during descent (finite, stops before landing)
+        const swayDir = gsap.utils.random([-1, 1]);
+        const swayCycles = Math.floor(fallDur / 2);
+        tl.to(bounce, {
+          x: swayDir * swayAmp,
+          rotation: swayDir * wobble,
+          duration: 1,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: swayCycles * 2 - 1,
+        }, 0);
 
-        // Right leg: line endpoint + boot move together
-        const rlX = gsap.utils.random(2, 8), rlY = gsap.utils.random(14, 20);
-        gsap.to(`.leg-right-${aid} line`, {
-          attr: { x2: rlX, y2: rlY },
-          duration: limbDrift * 0.9, repeat: -1, yoyo: true, ease: "sine.inOut", ...st, delay: delay + 0.5,
-        });
-        gsap.to(`.leg-right-${aid} rect`, {
-          attr: { x: rlX - 3, y: rlY - 2 },
-          duration: limbDrift * 0.9, repeat: -1, yoyo: true, ease: "sine.inOut", ...st, delay: delay + 0.5,
-        });
-
-        // Landing dust
-        gsap.from(`.landing-dust-${num}`, {
-          autoAlpha: 0,
-          scale: 0,
-          duration: 0.3,
-          ease: "power2.out",
-          ...st,
-          delay: delay + fallDur - 0.2,
-        });
-        gsap.to(`.landing-dust-${num}`, {
-          y: -10,
-          autoAlpha: 0,
-          scale: 1.5,
-          duration: 1.2,
-          ease: "power1.out",
-          ...st,
-          delay: delay + fallDur + 0.1,
-        });
-
-        // Settle upright — starts before landing so the sway gradually
-        // winds down rather than snapping when the fall completes.
-        gsap.to(bounce, {
+        // Phase 2: Settle upright (overlap with end of descent)
+        tl.to(bounce, {
           x: 0,
           rotation: 0,
-          duration: 2.5,
+          duration: 2,
           ease: "power2.out",
-          overwrite: "auto",
-          ...st,
-          delay: delay + fallDur - 2,
-        });
+          overwrite: true,
+        }, fallDur - 2);
 
-        // Idle float — gentle vertical bob only (no x/rotation so yoyo
-        // doesn't snap back to the old sway position each cycle).
-        gsap.to(bounce, {
+        // Landing dust
+        tl.from(`.landing-dust-${num}`, {
+          autoAlpha: 0, scale: 0, duration: 0.3, ease: "power2.out",
+        }, fallDur - 0.2);
+        tl.to(`.landing-dust-${num}`, {
+          y: -10, autoAlpha: 0, scale: 1.5, duration: 1.2, ease: "power1.out",
+        }, fallDur + 0.1);
+
+        // Phase 3: Idle hover (starts after landing, loops forever)
+        tl.to(bounce, {
           y: -hoverAmp,
           duration: hoverSpeed,
           repeat: -1,
           yoyo: true,
           ease: "sine.inOut",
-          ...st,
-          delay: delay + fallDur + 0.5,
-        });
+        }, fallDur + 0.5);
+
+        // Limb drift (independent loops, safe because they target different elements)
+        const laX = gsap.utils.random(-16, -8), laY = gsap.utils.random(6, 16);
+        const limbCfg = { duration: limbDrift, repeat: -1, yoyo: true, ease: "sine.inOut" as const };
+        tl.to(`.arm-left-${aid} line`, { attr: { x2: laX, y2: laY }, ...limbCfg }, 0);
+        tl.to(`.arm-left-${aid} circle`, { attr: { cx: laX, cy: laY }, ...limbCfg }, 0);
+
+        const driftDur = limbDrift * 1.1;
+        const driftCfg = { duration: driftDur, repeat: -1, yoyo: true, ease: "sine.inOut" as const };
+        tl.to(`.upper-arm-${aid}`, { attr: { x2: 10, y2: 4 }, ...driftCfg }, 0);
+        tl.to(`.forearm-${aid}`, { attr: { x1: 10, y1: 4, x2: 14, y2: 6 }, ...driftCfg }, 0);
+        tl.to(`.hand-${aid}`, { attr: { cx: 14, cy: 6 }, ...driftCfg }, 0);
+
+        const llX = gsap.utils.random(-8, -2), llY = gsap.utils.random(14, 20);
+        const legCfg = { duration: limbDrift * 0.9, repeat: -1, yoyo: true, ease: "sine.inOut" as const };
+        tl.to(`.leg-left-${aid} line`, { attr: { x2: llX, y2: llY }, ...legCfg }, 0.3);
+        tl.to(`.leg-left-${aid} rect`, { attr: { x: llX - 3, y: llY - 2 }, ...legCfg }, 0.3);
+
+        const rlX = gsap.utils.random(2, 8), rlY = gsap.utils.random(14, 20);
+        tl.to(`.leg-right-${aid} line`, { attr: { x2: rlX, y2: rlY }, ...legCfg }, 0.5);
+        tl.to(`.leg-right-${aid} rect`, { attr: { x: rlX - 3, y: rlY - 2 }, ...legCfg }, 0.5);
       };
 
       // Stagger — tighter gaps so all three appear quickly
