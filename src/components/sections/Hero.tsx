@@ -205,6 +205,82 @@ function GridOverlay() {
   );
 }
 
+function ShootingStars() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    let timer: ReturnType<typeof setTimeout>;
+
+    const spawnStar = () => {
+      if (!container) return;
+
+      // Random start position (top half of screen, any horizontal position)
+      const startX = Math.random() * 100;
+      const startY = Math.random() * 40;
+      // Travel direction: mostly downward-left to downward-right
+      const angle = 20 + Math.random() * 40; // 20-60 degrees from horizontal
+      const length = 80 + Math.random() * 120;
+      const dx = Math.cos(angle * Math.PI / 180) * length;
+      const dy = Math.sin(angle * Math.PI / 180) * length;
+
+      const star = document.createElement("div");
+      star.style.cssText = `
+        position: absolute;
+        left: ${startX}%;
+        top: ${startY}%;
+        width: ${30 + Math.random() * 40}px;
+        height: 1px;
+        background: linear-gradient(90deg, var(--color-amber), transparent);
+        transform: rotate(${angle}deg);
+        transform-origin: left center;
+        opacity: 0;
+        pointer-events: none;
+      `;
+      container.appendChild(star);
+
+      const tl = gsap.timeline({
+        onComplete: () => star.remove(),
+      });
+
+      // Streak in
+      tl.to(star, {
+        opacity: 0.6,
+        x: dx * 0.3,
+        y: dy * 0.3,
+        duration: 0.15,
+        ease: "power2.out",
+      });
+      // Streak through and fade
+      tl.to(star, {
+        opacity: 0,
+        x: dx,
+        y: dy,
+        duration: 0.6,
+        ease: "power1.in",
+      });
+
+      // Schedule next
+      timer = setTimeout(spawnStar, 12000 + Math.random() * 10000);
+    };
+
+    // First star after a random delay
+    timer = setTimeout(spawnStar, 5000 + Math.random() * 8000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+      aria-hidden="true"
+    />
+  );
+}
+
 function ScanLine() {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -750,6 +826,7 @@ export default function Hero({ ready = false }: { ready?: boolean }) {
           <OrbitalDiagram />
           <TelemetryReadout />
           <CoordinateDisplay />
+          <ShootingStars />
           <CursorTrail containerRef={containerRef} />
           <ClickRippleLayer containerRef={containerRef} />
         </>

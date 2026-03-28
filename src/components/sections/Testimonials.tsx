@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -14,6 +14,7 @@ const crew = [
     mission: "ASTRAX-4 // MARS ORBIT",
     quote: "The nav system locked our trajectory within 0.2km of predicted. Twelve months in deep space and not a single manual correction. That's not luck — that's engineering.",
     years: "14 yr service",
+    stats: { missions: 6, hours: "14,200", rating: "A+", patch: "amber" as const },
   },
   {
     name: "Dr. Kenji Okafor",
@@ -21,6 +22,7 @@ const crew = [
     mission: "ASTRAX-6 // ASTEROID SURVEY",
     quote: "We ran continuous spectrograph sweeps for 200 days. The ion array never faltered. I've worked with four agencies — Astrax builds the only hardware I'd trust past Jupiter.",
     years: "9 yr service",
+    stats: { missions: 4, hours: "8,760", rating: "A", patch: "teal" as const },
   },
   {
     name: "Lt. Sarah Chen",
@@ -28,6 +30,7 @@ const crew = [
     mission: "ASTRAX-3 // VENUS FLYBY",
     quote: "Signal handoff at solar conjunction used to mean 14 days of silence. The relay network gave us continuous contact. My crew could call home on Christmas. That matters.",
     years: "7 yr service",
+    stats: { missions: 3, hours: "6,400", rating: "A+", patch: "amber" as const },
   },
   {
     name: "Eng. Marcus Webb",
@@ -35,6 +38,7 @@ const crew = [
     mission: "ASTRAX-5 // EUROPA PROBE",
     quote: "I rebuilt the chamber seals at 3 AU with a socket wrench and the maintenance manual. Everything is designed to be serviced in zero-g, in gloves, in the dark. That's respect for the crew.",
     years: "11 yr service",
+    stats: { missions: 5, hours: "11,800", rating: "A", patch: "teal" as const },
   },
   {
     name: "Dr. Amara Diallo",
@@ -42,6 +46,7 @@ const crew = [
     mission: "ASTRAX-7 // MARS TRANSIT",
     quote: "The radiation shielding data changed my mind about long-duration missions. Crew exposure was 40% below projections. For the first time, I believe we can get to Mars and back healthy.",
     years: "6 yr service",
+    stats: { missions: 2, hours: "4,300", rating: "A+", patch: "amber" as const },
   },
 ];
 
@@ -49,6 +54,7 @@ const crew = [
 
 function CrewCard({ member, index }: { member: typeof crew[number]; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
+  const [flipped, setFlipped] = useState(false);
 
   useGSAP(() => {
     if (!ref.current) return;
@@ -62,43 +68,106 @@ function CrewCard({ member, index }: { member: typeof crew[number]; index: numbe
     });
   }, { scope: ref });
 
+  const patchColor = member.stats.patch === "teal" ? "var(--color-teal)" : "var(--color-amber)";
+
   return (
     <div
       ref={ref}
-      className="invisible w-80 shrink-0 border border-border/15 bg-card/30 transition-all duration-300 hover:-translate-y-1 hover:border-amber/20 hover:shadow-[0_0_15px_oklch(0.82_0.16_75/0.08)] sm:w-96"
+      className="invisible w-80 shrink-0 cursor-pointer sm:w-96"
+      style={{ perspective: "800px" }}
+      onClick={() => setFlipped(!flipped)}
     >
-      {/* Top accent */}
       <div
-        className="h-px w-full"
+        className="relative transition-transform duration-500"
         style={{
-          background: "linear-gradient(90deg, transparent, var(--color-amber), transparent)",
-          opacity: 0.3,
+          transformStyle: "preserve-3d",
+          transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
         }}
-      />
-
-      <div className="p-6">
-        {/* Rank + mission */}
-        <div className="mb-3 flex items-center justify-between">
-          <span className="font-mono text-[9px] tracking-[0.2em] text-amber/60 uppercase">
-            {member.rank}
-          </span>
-          <span className="font-mono text-[8px] text-foreground/15">
-            {member.years}
-          </span>
+      >
+        {/* ─── Front face ─── */}
+        <div
+          className="border border-border/15 bg-card/30 transition-colors duration-300 hover:border-amber/20"
+          style={{ backfaceVisibility: "hidden" }}
+        >
+          <div
+            className="h-px w-full"
+            style={{
+              background: `linear-gradient(90deg, transparent, ${patchColor}, transparent)`,
+              opacity: 0.3,
+            }}
+          />
+          <div className="p-6">
+            <div className="mb-3 flex items-center justify-between">
+              <span className="font-mono text-[9px] tracking-[0.2em] text-amber/60 uppercase">
+                {member.rank}
+              </span>
+              <span className="font-mono text-[8px] text-foreground/15">
+                {member.years}
+              </span>
+            </div>
+            <blockquote className="mb-4 font-mono text-[11px] leading-relaxed text-foreground/45">
+              &ldquo;{member.quote}&rdquo;
+            </blockquote>
+            <div className="border-t border-border/10 pt-3">
+              <div className="font-mono text-xs font-bold text-foreground/70">
+                {member.name}
+              </div>
+              <div className="mt-0.5 font-mono text-[9px] tracking-[0.15em] text-teal/50">
+                {member.mission}
+              </div>
+            </div>
+            <div className="mt-3 font-mono text-[8px] text-foreground/15 tracking-[0.15em] uppercase">
+              Tap to view mission patch →
+            </div>
+          </div>
         </div>
 
-        {/* Quote */}
-        <blockquote className="mb-4 font-mono text-[11px] leading-relaxed text-foreground/45">
-          &ldquo;{member.quote}&rdquo;
-        </blockquote>
+        {/* ─── Back face ─── */}
+        <div
+          className="absolute inset-0 border border-border/15 bg-card/30"
+          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+        >
+          <div
+            className="h-px w-full"
+            style={{
+              background: `linear-gradient(90deg, transparent, ${patchColor}, transparent)`,
+              opacity: 0.4,
+            }}
+          />
+          <div className="flex h-full flex-col items-center justify-center p-6">
+            {/* Mini mission patch */}
+            <svg viewBox="0 0 80 80" fill="none" className="mb-4 w-16">
+              <circle cx="40" cy="40" r="36" stroke={patchColor} strokeWidth="0.5" opacity="0.5" />
+              <circle cx="40" cy="40" r="32" stroke={patchColor} strokeWidth="0.3" strokeDasharray="2 3" opacity="0.3" />
+              <circle cx="40" cy="40" r="20" stroke={patchColor} strokeWidth="0.4" opacity="0.3" />
+              <line x1="40" y1="15" x2="40" y2="8" stroke={patchColor} strokeWidth="0.5" opacity="0.5" />
+              <line x1="40" y1="65" x2="40" y2="72" stroke={patchColor} strokeWidth="0.5" opacity="0.5" />
+              <line x1="15" y1="40" x2="8" y2="40" stroke={patchColor} strokeWidth="0.5" opacity="0.5" />
+              <line x1="65" y1="40" x2="72" y2="40" stroke={patchColor} strokeWidth="0.5" opacity="0.5" />
+              <circle cx="40" cy="40" r="3" fill={patchColor} opacity="0.7" />
+              <text x="40" y="78" fill={patchColor} fontSize="3.5" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.5">
+                {member.mission.split("//")[0]?.trim()}
+              </text>
+            </svg>
 
-        {/* Name + mission */}
-        <div className="border-t border-border/10 pt-3">
-          <div className="font-mono text-xs font-bold text-foreground/70">
-            {member.name}
-          </div>
-          <div className="mt-0.5 font-mono text-[9px] tracking-[0.15em] text-teal/50">
-            {member.mission}
+            {/* Mission stats */}
+            <div className="w-full space-y-2">
+              {[
+                ["MISSIONS", String(member.stats.missions)],
+                ["FLIGHT HOURS", member.stats.hours],
+                ["PERF. RATING", member.stats.rating],
+                ["STATUS", "ACTIVE"],
+              ].map(([key, val]) => (
+                <div key={key} className="flex items-center justify-between font-mono text-[10px]">
+                  <span className="text-foreground/25">{key}</span>
+                  <span style={{ color: patchColor }} className="opacity-70">{val}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-4 font-mono text-[8px] text-foreground/15 tracking-[0.15em] uppercase">
+              ← Tap to return
+            </div>
           </div>
         </div>
       </div>
