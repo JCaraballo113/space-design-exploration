@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -273,21 +273,60 @@ function OrbitalTooltip({ bodyId }: { bodyId: string }) {
 // Map body IDs to orbit indices: terra=0, mars=1, jupiter=2
 const bodyOrbitMap: Record<string, number> = { terra: 0, mars: 1, jupiter: 2 };
 
+// Orbit radii (approximate average of rx/ry) for distance-based hit detection
+const orbitRadii = [
+  { id: "sol", radius: 0 },
+  { id: "terra", radius: 100 },
+  { id: "mars", radius: 170 },
+  { id: "jupiter", radius: 255 },
+];
+
 function OrbitalDiagram() {
   const svgRef = useRef<SVGSVGElement>(null);
   const [hoveredBody, setHoveredBody] = useState<string | null>(null);
   const orbitTweens = useRef<gsap.core.Tween[]>([]);
 
-  // Pause/resume orbit tweens on hover
+  // Distance-based hover detection on the whole SVG
+  const handleMouseMove = useCallback((e: React.MouseEvent<SVGSVGElement>) => {
+    const svg = svgRef.current;
+    if (!svg) return;
+
+    const rect = svg.getBoundingClientRect();
+    // Convert screen coords to SVG viewBox coords (800x800)
+    const svgX = ((e.clientX - rect.left) / rect.width) * 800;
+    const svgY = ((e.clientY - rect.top) / rect.height) * 800;
+    const dist = Math.sqrt((svgX - 400) ** 2 + (svgY - 400) ** 2);
+
+    // Find closest orbit within threshold
+    let closest: string | null = null;
+    let minDiff = 40; // threshold in SVG units
+
+    for (const orbit of orbitRadii) {
+      const diff = Math.abs(dist - orbit.radius);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closest = orbit.id;
+      }
+    }
+
+    setHoveredBody(closest);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setHoveredBody(null);
+  }, []);
+
+  // Pause/resume orbit tweens on hover — resume all first, then pause only the hovered one
   useEffect(() => {
+    // Resume everything
+    orbitTweens.current.forEach((t) => t?.play());
+
+    // Then pause only the hovered body
     if (hoveredBody && hoveredBody !== "sol") {
       const idx = bodyOrbitMap[hoveredBody];
       if (idx !== undefined && idx in orbitTweens.current) {
         orbitTweens.current[idx].pause();
       }
-    } else {
-      // Resume all
-      orbitTweens.current.forEach((t) => t?.play());
     }
   }, [hoveredBody]);
 
@@ -374,8 +413,10 @@ function OrbitalDiagram() {
     <svg
       ref={svgRef}
       viewBox="0 0 800 800"
-      className="absolute right-[-5%] top-1/2 -translate-y-1/2 w-[65vw] max-w-[750px] opacity-90"
+      className="absolute right-[-5%] top-1/2 -translate-y-1/2 w-[65vw] max-w-[750px] cursor-crosshair opacity-90"
       fill="none"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       <defs>
         <radialGradient id="center-glow" cx="50%" cy="50%" r="50%">
@@ -440,16 +481,6 @@ function OrbitalDiagram() {
       <text className="orbit-label invisible" x="400" y="72" fill="var(--color-amber)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.2">000°</text>
       <text className="orbit-label invisible" x="728" y="404" fill="var(--color-amber)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.2">090°</text>
       <text className="orbit-label invisible" x="400" y="736" fill="var(--color-amber)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.2">180°</text>
-
-      {/* Interactive hitboxes — outermost first so inner orbits take priority via DOM stacking */}
-      {/* Jupiter on orbit-path-2: rx=280 ry=230 rotate(8) */}
-      <ellipse cx="400" cy="400" rx="280" ry="230" fill="none" stroke="rgba(255,255,255,0.001)" strokeWidth="60" className="cursor-pointer" transform="rotate(8 400 400)" onMouseEnter={() => setHoveredBody("jupiter")} onMouseLeave={() => setHoveredBody(null)} />
-      {/* Mars on orbit-path-1: rx=180 ry=160 rotate(-15) */}
-      <ellipse cx="400" cy="400" rx="180" ry="160" fill="none" stroke="rgba(255,255,255,0.001)" strokeWidth="50" className="cursor-pointer" transform="rotate(-15 400 400)" onMouseEnter={() => setHoveredBody("mars")} onMouseLeave={() => setHoveredBody(null)} />
-      {/* Terra on orbit-path-0: rx=100 ry=100 */}
-      <ellipse cx="400" cy="400" rx="100" ry="100" fill="none" stroke="rgba(255,255,255,0.001)" strokeWidth="50" className="cursor-pointer" onMouseEnter={() => setHoveredBody("terra")} onMouseLeave={() => setHoveredBody(null)} />
-      {/* Sol at center */}
-      <circle cx="400" cy="400" r="40" fill="rgba(255,255,255,0.001)" className="cursor-pointer" onMouseEnter={() => setHoveredBody("sol")} onMouseLeave={() => setHoveredBody(null)} />
 
       {/* Hover pulse — highlights the full orbit ring */}
       {hoveredBody === "sol" && <circle cx="400" cy="400" r="18" fill="none" stroke="var(--color-amber)" strokeWidth="1" opacity="0.5" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
