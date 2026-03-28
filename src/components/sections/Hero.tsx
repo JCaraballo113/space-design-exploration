@@ -263,11 +263,10 @@ function ShootingStars() {
       });
 
       // Schedule next
-      timer = setTimeout(spawnStar, 12000);
+      timer = setTimeout(spawnStar, 3000 + Math.random() * 3000);
     };
 
-    // First star after 3 seconds
-    timer = setTimeout(spawnStar, 3000);
+    timer = setTimeout(spawnStar, 2000);
 
     return () => clearTimeout(timer);
   }, []);
