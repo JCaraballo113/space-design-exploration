@@ -645,6 +645,7 @@ export default function Hero({ ready = false }: { ready?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [navVisible, setNavVisible] = useState(true);
+  const [navRevealed, setNavRevealed] = useState(false);
   const [ambientNoise, setAmbientNoise] = useState(false);
 
   // Toggle ambient noise class on body
@@ -697,6 +698,7 @@ export default function Hero({ ready = false }: { ready?: boolean }) {
         autoAlpha: 0,
         duration: 0.6,
         ease: "power2.out",
+        onComplete: () => { setNavRevealed(true); },
       })
         .from(
           ".hero-tag",
@@ -768,8 +770,7 @@ export default function Hero({ ready = false }: { ready?: boolean }) {
         style={{
           backgroundColor: "oklch(0.06 0.005 250 / 0.7)",
           transform: navVisible ? "translateY(0)" : "translateY(-100%)",
-          visibility: "hidden",
-          opacity: 0,
+          ...(navRevealed ? {} : { visibility: "hidden" as const, opacity: 0 }),
         }}
       >
         <div className="font-mono text-xs font-bold tracking-[0.4em] text-amber uppercase">
