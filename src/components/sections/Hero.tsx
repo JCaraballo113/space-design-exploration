@@ -237,9 +237,59 @@ const bodyData = [
   { id: "jupiter", name: "JUPITER", type: "GAS GIANT", distance: "5.2 AU", temp: "165 K", mass: "1.90×10²⁷ kg" },
 ];
 
+const tooltipPositions: Record<string, { x: number; y: number }> = {
+  sol: { x: 400, y: 345 },
+  terra: { x: 520, y: 315 },
+  mars: { x: 600, y: 265 },
+  jupiter: { x: 690, y: 140 },
+};
+
+function OrbitalTooltip({ bodyId }: { bodyId: string }) {
+  const ref = useRef<SVGGElement>(null);
+  const body = bodyData.find(b => b.id === bodyId);
+  const pos = tooltipPositions[bodyId] ?? { x: 400, y: 400 };
+
+  useEffect(() => {
+    if (!ref.current) return;
+    gsap.fromTo(ref.current,
+      { autoAlpha: 0, y: 6 },
+      { autoAlpha: 1, y: 0, duration: 0.25, ease: "power2.out" }
+    );
+  }, [bodyId]);
+
+  if (!body) return null;
+
+  return (
+    <g ref={ref} style={{ opacity: 0 }}>
+      <rect x={pos.x - 72} y={pos.y - 32} width="144" height="60" rx="2" fill="oklch(0.08 0.005 250 / 0.95)" stroke="var(--color-amber)" strokeWidth="0.5" opacity="0.9" />
+      <text x={pos.x} y={pos.y - 17} fill="var(--color-amber)" fontSize="9" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.9">{body.name}</text>
+      <text x={pos.x} y={pos.y - 4} fill="var(--color-foreground)" fontSize="6.5" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.4">{body.type}</text>
+      <text x={pos.x} y={pos.y + 9} fill="var(--color-teal)" fontSize="6.5" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.6">{body.distance} // {body.temp}</text>
+      <text x={pos.x} y={pos.y + 21} fill="var(--color-foreground)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.3">{body.mass}</text>
+    </g>
+  );
+}
+
+// Map body IDs to orbit indices: terra=0, mars=1, jupiter=2
+const bodyOrbitMap: Record<string, number> = { terra: 0, mars: 1, jupiter: 2 };
+
 function OrbitalDiagram() {
   const svgRef = useRef<SVGSVGElement>(null);
   const [hoveredBody, setHoveredBody] = useState<string | null>(null);
+  const orbitTweens = useRef<gsap.core.Tween[]>([]);
+
+  // Pause/resume orbit tweens on hover
+  useEffect(() => {
+    if (hoveredBody && hoveredBody !== "sol") {
+      const idx = bodyOrbitMap[hoveredBody];
+      if (idx !== undefined && idx in orbitTweens.current) {
+        orbitTweens.current[idx].pause();
+      }
+    } else {
+      // Resume all
+      orbitTweens.current.forEach((t) => t?.play());
+    }
+  }, [hoveredBody]);
 
   useGSAP(
     () => {
@@ -272,7 +322,7 @@ function OrbitalDiagram() {
         const path = document.querySelector(`.orbit-path-${i}`) as SVGEllipseElement;
         if (!path) return;
         const duration = 12 + i * 6;
-        gsap.to({ t: 0 }, {
+        const tween = gsap.to({ t: 0 }, {
           t: 1,
           duration,
           repeat: -1,
@@ -288,6 +338,7 @@ function OrbitalDiagram() {
             el.setAttribute("cy", String(cy + Math.sin(angle) * ry));
           },
         });
+        orbitTweens.current[i] = tween;
       });
 
       gsap.from(".orbit-label", {
@@ -390,39 +441,20 @@ function OrbitalDiagram() {
       <text className="orbit-label invisible" x="728" y="404" fill="var(--color-amber)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.2">090°</text>
       <text className="orbit-label invisible" x="400" y="736" fill="var(--color-amber)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.2">180°</text>
 
-      {/* Interactive hitboxes — hover orbit paths (fat invisible strokes) and center body */}
-      <circle cx="400" cy="400" r="25" fill="transparent" className="cursor-pointer" onMouseEnter={() => setHoveredBody("sol")} onMouseLeave={() => setHoveredBody(null)} />
-      <ellipse cx="400" cy="400" rx="100" ry="100" fill="none" stroke="transparent" strokeWidth="20" className="cursor-pointer" onMouseEnter={() => setHoveredBody("terra")} onMouseLeave={() => setHoveredBody(null)} />
-      <ellipse cx="400" cy="400" rx="180" ry="160" fill="none" stroke="transparent" strokeWidth="20" className="cursor-pointer" transform="rotate(-15 400 400)" onMouseEnter={() => setHoveredBody("mars")} onMouseLeave={() => setHoveredBody(null)} />
-      <ellipse cx="400" cy="400" rx="370" ry="320" fill="none" stroke="transparent" strokeWidth="25" className="cursor-pointer" transform="rotate(-5 400 400)" onMouseEnter={() => setHoveredBody("jupiter")} onMouseLeave={() => setHoveredBody(null)} />
+      {/* Interactive hitboxes — visible stroke at 0 opacity, pointerEvents="visibleStroke" */}
+      <circle cx="400" cy="400" r="25" fill="rgba(255,255,255,0.001)" className="cursor-pointer" onMouseEnter={() => setHoveredBody("sol")} onMouseLeave={() => setHoveredBody(null)} />
+      <ellipse cx="400" cy="400" rx="100" ry="100" fill="none" stroke="rgba(255,255,255,0.001)" strokeWidth="25" className="cursor-pointer" onMouseEnter={() => setHoveredBody("terra")} onMouseLeave={() => setHoveredBody(null)} />
+      <ellipse cx="400" cy="400" rx="180" ry="160" fill="none" stroke="rgba(255,255,255,0.001)" strokeWidth="25" className="cursor-pointer" transform="rotate(-15 400 400)" onMouseEnter={() => setHoveredBody("mars")} onMouseLeave={() => setHoveredBody(null)} />
+      <ellipse cx="400" cy="400" rx="370" ry="320" fill="none" stroke="rgba(255,255,255,0.001)" strokeWidth="30" className="cursor-pointer" transform="rotate(-5 400 400)" onMouseEnter={() => setHoveredBody("jupiter")} onMouseLeave={() => setHoveredBody(null)} />
 
       {/* Hover pulse — highlights the full orbit ring */}
       {hoveredBody === "sol" && <circle cx="400" cy="400" r="18" fill="none" stroke="var(--color-amber)" strokeWidth="1" opacity="0.5" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
-      {hoveredBody === "terra" && <ellipse cx="400" cy="400" rx="100" ry="100" fill="none" stroke="var(--color-amber)" strokeWidth="1" opacity="0.3" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
-      {hoveredBody === "mars" && <ellipse cx="400" cy="400" rx="180" ry="160" fill="none" stroke="var(--color-amber)" strokeWidth="1" opacity="0.3" transform="rotate(-15 400 400)" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
-      {hoveredBody === "jupiter" && <ellipse cx="400" cy="400" rx="370" ry="320" fill="none" stroke="var(--color-amber)" strokeWidth="1" opacity="0.2" transform="rotate(-5 400 400)" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
+      {hoveredBody === "terra" && <ellipse cx="400" cy="400" rx="100" ry="100" fill="none" stroke="var(--color-amber)" strokeWidth="1.5" opacity="0.4" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
+      {hoveredBody === "mars" && <ellipse cx="400" cy="400" rx="180" ry="160" fill="none" stroke="var(--color-amber)" strokeWidth="1.5" opacity="0.35" transform="rotate(-15 400 400)" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
+      {hoveredBody === "jupiter" && <ellipse cx="400" cy="400" rx="370" ry="320" fill="none" stroke="var(--color-amber)" strokeWidth="1.5" opacity="0.25" transform="rotate(-5 400 400)" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
 
-      {/* Tooltip for hovered body */}
-      {hoveredBody && (() => {
-        const body = bodyData.find(b => b.id === hoveredBody);
-        if (!body) return null;
-        const positions: Record<string, { x: number; y: number }> = {
-          sol: { x: 400, y: 350 },
-          terra: { x: 520, y: 320 },
-          mars: { x: 600, y: 270 },
-          jupiter: { x: 700, y: 150 },
-        };
-        const pos = positions[hoveredBody] ?? { x: 400, y: 400 };
-        return (
-          <g>
-            <rect x={pos.x - 70} y={pos.y - 30} width="140" height="56" rx="2" fill="oklch(0.08 0.005 250 / 0.95)" stroke="var(--color-amber)" strokeWidth="0.5" opacity="0.9" />
-            <text x={pos.x} y={pos.y - 15} fill="var(--color-amber)" fontSize="8" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.9">{body.name}</text>
-            <text x={pos.x} y={pos.y - 4} fill="var(--color-foreground)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.4">{body.type}</text>
-            <text x={pos.x} y={pos.y + 8} fill="var(--color-teal)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.6">{body.distance} // {body.temp}</text>
-            <text x={pos.x} y={pos.y + 19} fill="var(--color-foreground)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.3">{body.mass}</text>
-          </g>
-        );
-      })()}
+      {/* Tooltip for hovered body — animated in */}
+      {hoveredBody && <OrbitalTooltip bodyId={hoveredBody} />}
     </svg>
   );
 }
