@@ -10,6 +10,14 @@ export function Preloader({ onComplete }: { onComplete: () => void }) {
   const [removed, setRemoved] = useState(false);
 
   useEffect(() => {
+    // Skip preloader if already seen this session
+    if (sessionStorage.getItem("astrax-preloader-seen")) {
+      document.body.style.overflow = "";
+      setRemoved(true);
+      onComplete();
+      return;
+    }
+
     const container = containerRef.current;
     const word = wordRef.current;
     const scan = scanRef.current;
@@ -23,6 +31,7 @@ export function Preloader({ onComplete }: { onComplete: () => void }) {
     const tl = gsap.timeline({
       onComplete: () => {
         document.body.style.overflow = "";
+        sessionStorage.setItem("astrax-preloader-seen", "1");
         setRemoved(true);
         onComplete();
       },

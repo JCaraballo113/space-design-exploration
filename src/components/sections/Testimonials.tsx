@@ -65,7 +65,7 @@ function CrewCard({ member, index }: { member: typeof crew[number]; index: numbe
   return (
     <div
       ref={ref}
-      className="invisible w-80 shrink-0 border border-border/15 bg-card/30 sm:w-96"
+      className="invisible w-80 shrink-0 border border-border/15 bg-card/30 transition-all duration-300 hover:-translate-y-1 hover:border-amber/20 hover:shadow-[0_0_15px_oklch(0.82_0.16_75/0.08)] sm:w-96"
     >
       {/* Top accent */}
       <div

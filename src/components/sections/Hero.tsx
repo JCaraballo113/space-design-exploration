@@ -230,8 +230,16 @@ function ScanLine() {
   );
 }
 
+const bodyData = [
+  { id: "sol", name: "SOL", type: "G2V MAIN SEQUENCE", distance: "0 AU", temp: "5,778 K", mass: "1.0 M☉" },
+  { id: "terra", name: "TERRA", type: "TERRESTRIAL", distance: "1.0 AU", temp: "288 K", mass: "5.97×10²⁴ kg" },
+  { id: "mars", name: "MARS", type: "TERRESTRIAL", distance: "1.52 AU", temp: "210 K", mass: "6.42×10²³ kg" },
+  { id: "jupiter", name: "JUPITER", type: "GAS GIANT", distance: "5.2 AU", temp: "165 K", mass: "1.90×10²⁷ kg" },
+];
+
 function OrbitalDiagram() {
   const svgRef = useRef<SVGSVGElement>(null);
+  const [hoveredBody, setHoveredBody] = useState<string | null>(null);
 
   useGSAP(
     () => {
@@ -381,6 +389,41 @@ function OrbitalDiagram() {
       <text className="orbit-label invisible" x="400" y="72" fill="var(--color-amber)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.2">000°</text>
       <text className="orbit-label invisible" x="728" y="404" fill="var(--color-amber)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.2">090°</text>
       <text className="orbit-label invisible" x="400" y="736" fill="var(--color-amber)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.2">180°</text>
+
+      {/* Interactive body hitboxes — larger invisible circles for easier hover */}
+      <circle cx="400" cy="400" r="25" fill="transparent" className="cursor-pointer" onMouseEnter={() => setHoveredBody("sol")} onMouseLeave={() => setHoveredBody(null)} />
+      <circle cx="400" cy="300" r="20" fill="transparent" className="cursor-pointer" onMouseEnter={() => setHoveredBody("terra")} onMouseLeave={() => setHoveredBody(null)} />
+      <circle cx="400" cy="240" r="20" fill="transparent" className="cursor-pointer" onMouseEnter={() => setHoveredBody("mars")} onMouseLeave={() => setHoveredBody(null)} />
+      <circle cx="400" cy="80" r="25" fill="transparent" className="cursor-pointer" onMouseEnter={() => setHoveredBody("jupiter")} onMouseLeave={() => setHoveredBody(null)} />
+
+      {/* Hover pulse rings */}
+      {hoveredBody === "sol" && <circle cx="400" cy="400" r="18" fill="none" stroke="var(--color-amber)" strokeWidth="1" opacity="0.5" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
+      {hoveredBody === "terra" && <circle className="orbit-body-moving" cx="500" cy="400" r="8" fill="none" stroke="var(--color-teal)" strokeWidth="0.8" opacity="0.5" data-orbit="0" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
+      {hoveredBody === "mars" && <circle className="orbit-body-moving" cx="580" cy="400" r="8" fill="none" stroke="var(--color-amber)" strokeWidth="0.8" opacity="0.5" data-orbit="1" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
+      {hoveredBody === "jupiter" && <circle className="orbit-body-moving" cx="680" cy="400" r="10" fill="none" stroke="var(--color-amber)" strokeWidth="0.8" opacity="0.5" data-orbit="2" style={{ animation: "glow-pulse 1.5s ease-in-out infinite" }} />}
+
+      {/* Tooltip for hovered body */}
+      {hoveredBody && (() => {
+        const body = bodyData.find(b => b.id === hoveredBody);
+        if (!body) return null;
+        // Position tooltip near the body
+        const positions: Record<string, { x: number; y: number }> = {
+          sol: { x: 400, y: 350 },
+          terra: { x: 340, y: 290 },
+          mars: { x: 340, y: 220 },
+          jupiter: { x: 340, y: 100 },
+        };
+        const pos = positions[hoveredBody] ?? { x: 400, y: 400 };
+        return (
+          <g>
+            <rect x={pos.x - 70} y={pos.y - 30} width="140" height="56" rx="2" fill="oklch(0.08 0.005 250 / 0.95)" stroke="var(--color-amber)" strokeWidth="0.5" opacity="0.9" />
+            <text x={pos.x} y={pos.y - 15} fill="var(--color-amber)" fontSize="8" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.9">{body.name}</text>
+            <text x={pos.x} y={pos.y - 4} fill="var(--color-foreground)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.4">{body.type}</text>
+            <text x={pos.x} y={pos.y + 8} fill="var(--color-teal)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.6">{body.distance} // {body.temp}</text>
+            <text x={pos.x} y={pos.y + 19} fill="var(--color-foreground)" fontSize="6" fontFamily="var(--font-mono)" textAnchor="middle" opacity="0.3">{body.mass}</text>
+          </g>
+        );
+      })()}
     </svg>
   );
 }
@@ -535,19 +578,41 @@ export default function Hero({ ready = false }: { ready?: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const [navVisible, setNavVisible] = useState(true);
+  const [ambientNoise, setAmbientNoise] = useState(false);
 
-  // Track which section is currently in view
+  // Toggle ambient noise class on body
+  useEffect(() => {
+    document.body.classList.toggle("ambient-noise", ambientNoise);
+    return () => { document.body.classList.remove("ambient-noise"); };
+  }, [ambientNoise]);
+  const lastScrollY = useRef(0);
+
+  // Track which section is in view + hide/show nav on scroll direction
   useEffect(() => {
     const onScroll = () => {
+      const y = window.scrollY;
+
+      // Active section tracking
       const sections = document.querySelectorAll<HTMLElement>("section[data-section]");
       let current = "";
       sections.forEach((el) => {
         const top = el.offsetTop - window.innerHeight * 0.4;
-        if (window.scrollY >= top) {
+        if (y >= top) {
           current = el.getAttribute("data-section") || "";
         }
       });
       setActiveSection(current);
+
+      // Nav hide/show — always visible at top, hide on scroll down, show on scroll up
+      if (y < 100) {
+        setNavVisible(true);
+      } else if (y > lastScrollY.current + 5) {
+        setNavVisible(false);
+      } else if (y < lastScrollY.current - 5) {
+        setNavVisible(true);
+      }
+      lastScrollY.current = y;
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -631,7 +696,13 @@ export default function Hero({ ready = false }: { ready?: boolean }) {
       />
 
       {/* Nav — fixed, follows scroll */}
-      <nav className="hero-nav invisible fixed top-0 right-0 left-0 z-40 flex items-center justify-between border-b border-border/50 px-8 py-4 backdrop-blur-md lg:px-12" style={{ backgroundColor: "oklch(0.06 0.005 250 / 0.7)" }}>
+      <nav
+        className="hero-nav invisible fixed top-0 right-0 left-0 z-40 flex items-center justify-between border-b border-border/50 px-8 py-4 backdrop-blur-md transition-transform duration-300 lg:px-12"
+        style={{
+          backgroundColor: "oklch(0.06 0.005 250 / 0.7)",
+          transform: navVisible ? "translateY(0)" : "translateY(-100%)",
+        }}
+      >
         <div className="font-mono text-xs font-bold tracking-[0.4em] text-amber uppercase">
           ASTRAX
         </div>
@@ -660,10 +731,15 @@ export default function Hero({ ready = false }: { ready?: boolean }) {
             );
           })}
         </div>
-        <div className="hidden items-center gap-3 font-mono text-[10px] text-foreground/40 sm:flex">
-          <span className="inline-block size-1.5 rounded-full bg-teal animate-pulse" />
-          <span className="tracking-[0.15em] uppercase">Live Telemetry</span>
-        </div>
+        <button
+          onClick={() => setAmbientNoise(!ambientNoise)}
+          className="hidden items-center gap-3 font-mono text-[10px] text-foreground/40 transition-colors hover:text-amber sm:flex"
+        >
+          <span className={`inline-block size-1.5 rounded-full ${ambientNoise ? "bg-amber animate-pulse" : "bg-teal animate-pulse"}`} />
+          <span className="tracking-[0.15em] uppercase">
+            Audio: {ambientNoise ? "ON" : "OFF"}
+          </span>
+        </button>
         {/* Mobile hamburger */}
         <button
           className="flex flex-col gap-[5px] sm:hidden"

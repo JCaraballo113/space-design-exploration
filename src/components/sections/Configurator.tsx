@@ -1105,8 +1105,8 @@ export default function Configurator() {
 
           {/* Main layout: blueprint + controls */}
           <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
-            {/* Blueprint SVG */}
-            <div className="relative flex-1 min-w-0">
+            {/* Blueprint SVG — hidden on mobile */}
+            <div className="relative hidden flex-1 min-w-0 lg:block">
               {scanlineEl}
 
               {/* Countdown / launched overlay */}
